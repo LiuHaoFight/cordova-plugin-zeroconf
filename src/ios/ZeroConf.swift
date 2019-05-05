@@ -4,10 +4,12 @@ import Foundation
 
     fileprivate var publishers: [String: Publisher]!
     fileprivate var browsers: [String: Browser]!
+    var wlkBrowser: ServiceBrowser?
 
     override public func pluginInitialize() {
         publishers  = [:]
         browsers = [:]
+        wlkBrowser = ServiceBrowser()
     }
 
     override public func onAppTerminate() {
@@ -92,7 +94,7 @@ import Foundation
     }
 
     @objc public func watch(_ command: CDVInvokedUrlCommand) {
-
+        wlkBrowser?.resume()
         let type = command.argument(at: 0) as! String
         let domain = command.argument(at: 1) as! String
 
@@ -108,7 +110,7 @@ import Foundation
     }
 
     @objc public func unwatch(_ command: CDVInvokedUrlCommand) {
-
+        wlkBrowser?.pause()
         let type = command.argument(at: 0) as! String
         let domain = command.argument(at: 1) as! String
 
@@ -240,8 +242,10 @@ import Foundation
         @objc func netServiceDidStop(_ netService: NetService) {
             nsp = nil
             commandDelegate = nil
-
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
+            let service = ZeroConf.jsonifyService(netService)
+            let message: NSDictionary = NSDictionary(objects: ["added", service], forKeys: ["action" as NSCopying, "service" as NSCopying])
+    
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: (message as! [AnyHashable: Any]))
             commandDelegate?.send(pluginResult, callbackId: callbackId)
         }
 
@@ -435,5 +439,6 @@ import Foundation
         }
         return nil
     }
+    
 
 }
