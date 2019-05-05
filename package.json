@@ -1,6 +1,6 @@
 {
-    "name": "cordova-plugin-zeroconf",
-    "version": "1.4.0",
+    "name": "cordova-plugin-zeroconf-zz",
+    "version": "1.5.1",
     "description": "Cordova ZeroConf plugin",
     "cordova": {
         "id": "cordova-plugin-zeroconf-zz",
@@ -11,7 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/becvert/cordova-plugin-zeroconf.git"
+        "url": "git+https://github.com/Joker-1991/cordova-plugin-zeroconf.git"
     },
     "keywords": [
         "ecosystem:cordova",
@@ -27,8 +27,8 @@
         "discovery"
     ],
     "author": {
-        "name": "Sylvain Bréjeon",
-        "url": "https://github.com/becvert"
+        "name": "vitta",
+        "url": "https://github.com/joker-1991"
     },
     "contributors": {
         "name": "Eric McNiece",
@@ -36,7 +36,7 @@
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/becvert/cordova-plugin-zeroconf/issues"
+        "url": "https://github.com/Joker-1991/cordova-plugin-zeroconf.git/issues"
     },
-    "homepage": "https://github.com/becvert/cordova-plugin-zeroconf"
+    "homepage": "https://github.com/Joker-1991/cordova-plugin-zeroconf.git"
 }
