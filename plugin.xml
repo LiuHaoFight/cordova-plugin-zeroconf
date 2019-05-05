@@ -41,6 +41,10 @@
         <source-file src="src/ios/ZeroConf.swift"/>
         <header-file src="src/ios/Hostname.h"/>
         <source-file src="src/ios/Hostname.m"/>
+        <source-file src="src/ios/Hostname.swift"/>
+        <source-file src="src/ios/ServiceBrowser.swift"/>
+        <source-file src="src/ios/ServiceGroup.swift"/>
+        <source-file src="src/ios/ServiceName.swift"/>
     </platform>
     
     <dependency id="cordova-plugin-add-swift-support" version="2.0.1"/>
