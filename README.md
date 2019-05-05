@@ -11,7 +11,7 @@ This is not a background service. When the cordova view is destroyed/terminated,
 In your application project directory:
 
 ```bash
-cordova plugin add cordova-plugin-zeroconf
+cordova plugin add cordova-plugin-zeroconf-zz
 ```
 
 ## Usage ##
