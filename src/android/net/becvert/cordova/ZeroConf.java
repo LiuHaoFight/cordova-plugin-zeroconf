@@ -445,7 +445,9 @@ public class ZeroConf extends CordovaPlugin {
         }
 
         private void watch(String type, String domain, CallbackContext callbackContext) {
-
+            NsdHelper nsdHelper = new NsdHelper(cordova.getActivity().getApplicationContext());
+            nsdHelper.initializeNsd();
+            nsdHelper.initializeDiscoveryListener();
             callbacks.put(type + domain, callbackContext);
 
             for (JmDNS browser : browsers) {
