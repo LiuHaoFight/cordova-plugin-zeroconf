@@ -342,7 +342,8 @@ public class ZeroConf extends CordovaPlugin {
 
         } else if (ACTION_REINIT.equals(action)) {
             Log.e(TAG, "Re-Initializing");
-
+            final String type = args.optString(0);
+            final String domain = args.optString(1);
             cordova.getThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -445,15 +446,14 @@ public class ZeroConf extends CordovaPlugin {
         }
 
         private void watch(String type, String domain, CallbackContext callbackContext) {
-            NsdHelper nsdHelper = new NsdHelper(cordova.getActivity().getApplicationContext());
-            nsdHelper.initializeNsd();
-            nsdHelper.initializeDiscoveryListener();
             callbacks.put(type + domain, callbackContext);
 
             for (JmDNS browser : browsers) {
                 browser.addServiceListener(type + domain, this);
             }
-
+            NsdHelper nsdHelper = new NsdHelper(type, domain, cordova.getActivity().getApplicationContext());
+            nsdHelper.initializeNsd(callbackContext);
+            nsdHelper.discoverServices();
         }
 
         private void unwatch(String type, String domain) {
@@ -524,7 +524,7 @@ public class ZeroConf extends CordovaPlugin {
 
     }
 
-    private static JSONObject jsonifyService(ServiceInfo service) throws JSONException {
+    public static JSONObject jsonifyService(ServiceInfo service) throws JSONException {
         JSONObject obj = new JSONObject();
 
         String domain = service.getDomain() + ".";
