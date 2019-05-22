@@ -1,6 +1,6 @@
 {
     "name": "@osvlabs/cordova-plugin-zeroconf-zz",
-    "version": "1.5.7",
+    "version": "1.5.8",
     "description": "Cordova ZeroConf plugin",
     "cordova": {
         "id": "cordova-plugin-zeroconf-zz",
