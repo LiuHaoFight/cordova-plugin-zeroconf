@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-zeroconf-zz"
-    version="1.5.8">
+    version="1.5.9">
 
     <name>ZeroConf</name>
     <description>ZeroConf plugin for Cordova/Phonegap</description>
@@ -25,6 +25,7 @@
             </feature>
         </config-file>
         <source-file src="src/android/net/becvert/cordova/ZeroConf.java" target-dir="src/net/becvert/cordova" />
+        <source-file src="src/android/net/becvert/cordova/NsdHelper.java" target-dir="src/net/becvert/cordova" />
         <framework src="org.jmdns:jmdns:3.5.5" />
         <framework src="com.google.code.gson:gson:2.8.5" />
     </platform>
