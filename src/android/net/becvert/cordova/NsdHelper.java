@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package net.becvert.cordova;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.nsd.NsdServiceInfo;
@@ -42,64 +43,87 @@ public class NsdHelper {
     public static final String TAG = "NsdHelper";
     public String mServiceName = "smarthome";
     NsdServiceInfo mService;
+
     public NsdHelper(String type, String domain, Context context) {
         SERVICE_TYPE = type;
         serviceDomain = domain;
         mContext = context;
         mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
     }
+
     public void initializeNsd(CallbackContext cbc) {
         callbackContext = cbc;
         initializeResolveListener();
         //mNsdManager.init(mContext.getMainLooper(), this);
     }
+
     public void initializeDiscoveryListener() {
-        mDiscoveryListener = new NsdManager.DiscoveryListener() {
-            @Override
-            public void onDiscoveryStarted(String regType) {
-                Log.d(TAG, "Service discovery started");
-            }
-            @Override
-            public void onServiceFound(NsdServiceInfo service) {
-                Log.d(TAG, "Service discovery success" + service);
-                if (!service.getServiceType().equals(SERVICE_TYPE)) {
-                    Log.d(TAG, "Unknown Service Type: " + service.getServiceType());
-                } else if (service.getServiceName().equals(mServiceName)) {
-                    Log.d(TAG, "Same machine: " + mServiceName);
-                    mNsdManager.resolveService(service, mResolveListener);
-                } else if (service.getServiceName().contains(mServiceName)){
-                    mNsdManager.resolveService(service, mResolveListener);
-                } else if (service.getServiceType().contains(SERVICE_TYPE)) {
-                    mNsdManager.resolveService(service, mResolveListener);
+        try {
+            mDiscoveryListener = new NsdManager.DiscoveryListener() {
+                @Override
+                public void onDiscoveryStarted(String regType) {
+                    Log.d(TAG, "Service discovery started");
                 }
-            }
-            @Override
-            public void onServiceLost(NsdServiceInfo service) {
-                Log.e(TAG, "service lost" + service);
-                if (mService == service) {
-                    mService = null;
+
+                @Override
+                public void onServiceFound(NsdServiceInfo service) {
+                    try {
+                        Log.d(TAG, "Service discovery success" + service);
+                        if (!service.getServiceType().equals(SERVICE_TYPE)) {
+                            Log.d(TAG, "Unknown Service Type: " + service.getServiceType());
+                        } else if (service.getServiceName().equals(mServiceName)) {
+                            Log.d(TAG, "Same machine: " + mServiceName);
+                            mNsdManager.resolveService(service, mResolveListener);
+                        } else if (service.getServiceName().contains(mServiceName)) {
+                            try {
+                                mNsdManager.resolveService(service, mResolveListener);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error");
+                            }
+                        } else if (service.getServiceType().contains(SERVICE_TYPE)) {
+                            mNsdManager.resolveService(service, mResolveListener);
+                        }
+                    } catch (JsonIOException e) {
+                        Log.e(TAG, e.getMessage(), e);
+                        callbackContext.error("Error: " + e.getMessage());
+                    }
                 }
-            }
-            @Override
-            public void onDiscoveryStopped(String serviceType) {
-                Log.i(TAG, "Discovery stopped: " + serviceType);
-            }
-            @Override
-            public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-                Log.e(TAG, "Discovery failed: Error code:" + errorCode);
-            }
-            @Override
-            public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-                Log.e(TAG, "Discovery failed: Error code:" + errorCode);
-            }
-        };
+
+                @Override
+                public void onServiceLost(NsdServiceInfo service) {
+                    Log.e(TAG, "service lost" + service);
+                    if (mService == service) {
+                        mService = null;
+                    }
+                }
+
+                @Override
+                public void onDiscoveryStopped(String serviceType) {
+                    Log.i(TAG, "Discovery stopped: " + serviceType);
+                }
+
+                @Override
+                public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+                    Log.e(TAG, "Discovery failed: Error code:" + errorCode);
+                }
+
+                @Override
+                public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+                    Log.e(TAG, "Discovery failed: Error code:" + errorCode);
+                }
+            };
+        } catch (Exception e) {
+            Log.e(TAG, "error");
+        }
     }
+
     public void initializeResolveListener() {
         mResolveListener = new NsdManager.ResolveListener() {
             @Override
             public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
                 Log.e(TAG, "Resolve failed" + errorCode);
             }
+
             @Override
             public void onServiceResolved(NsdServiceInfo serviceInfo) {
                 Log.d(TAG, "Resolve Succeeded. " + serviceInfo);
@@ -113,7 +137,7 @@ public class NsdHelper {
         };
     }
 
-    public void handleServiceInfo (NsdServiceInfo serviceInfo) {
+    public void handleServiceInfo(NsdServiceInfo serviceInfo) {
         try {
             JsonObject newServiceInfo = new JsonObject();
             newServiceInfo.add("domain", new JsonPrimitive(serviceDomain));
@@ -157,36 +181,42 @@ public class NsdHelper {
                 mServiceName = NsdServiceInfo.getServiceName();
                 Log.d(TAG, "Service registered: " + mServiceName);
             }
+
             @Override
             public void onRegistrationFailed(NsdServiceInfo arg0, int arg1) {
                 Log.d(TAG, "Service registration failed: " + arg1);
             }
+
             @Override
             public void onServiceUnregistered(NsdServiceInfo arg0) {
                 Log.d(TAG, "Service unregistered: " + arg0.getServiceName());
             }
+
             @Override
             public void onUnregistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
                 Log.d(TAG, "Service unregistration failed: " + errorCode);
             }
         };
     }
+
     public void registerService(int port) {
         tearDown();  // Cancel any previous registration request
         initializeRegistrationListener();
-        NsdServiceInfo serviceInfo  = new NsdServiceInfo();
+        NsdServiceInfo serviceInfo = new NsdServiceInfo();
         serviceInfo.setPort(port);
         serviceInfo.setServiceName(mServiceName);
         serviceInfo.setServiceType(SERVICE_TYPE);
         mNsdManager.registerService(
                 serviceInfo, NsdManager.PROTOCOL_DNS_SD, mRegistrationListener);
     }
+
     public void discoverServices() {
         stopDiscovery();  // Cancel any existing discovery request
         initializeDiscoveryListener();
         mNsdManager.discoverServices(
                 SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
     }
+
     public void stopDiscovery() {
         if (mDiscoveryListener != null) {
             try {
@@ -196,9 +226,11 @@ public class NsdHelper {
             mDiscoveryListener = null;
         }
     }
+
     public NsdServiceInfo getChosenServiceInfo() {
         return mService;
     }
+
     public void tearDown() {
         if (mRegistrationListener != null) {
             try {
