@@ -166,8 +166,12 @@ public class NsdHelper {
         JsonObject record = new JsonObject();
         while (it.hasNext()) {
           Map.Entry pairs = (Map.Entry)it.next();
-          record.add(pairs.getKey().toString(),
-                     new JsonPrimitive(new String((byte[])pairs.getValue())));
+          try {
+            record.add(pairs.getKey().toString(),
+                       new JsonPrimitive(new String((byte[])pairs.getValue())));
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
         }
         newServiceInfo.add("txtRecord", record);
       }
