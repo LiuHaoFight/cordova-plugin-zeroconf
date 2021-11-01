@@ -1,9 +1,9 @@
 {
-    "name": "@osvlabs/cordova-plugin-zeroconf-zz",
+    "name": "cordova-plugin-zeroconf",
     "version": "1.6.2",
     "description": "Cordova ZeroConf plugin",
     "cordova": {
-        "id": "cordova-plugin-zeroconf-zz",
+        "id": "cordova-plugin-zeroconf",
         "platforms": [
             "android",
             "ios"
@@ -11,7 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Joker-1991/cordova-plugin-zeroconf.git"
+        "url": "git+https://github.com/LiuHaoFight/cordova-plugin-zeroconf.git"
     },
     "keywords": [
         "ecosystem:cordova",
@@ -28,15 +28,11 @@
     ],
     "author": {
         "name": "vitta",
-        "url": "https://github.com/joker-1991"
-    },
-    "contributors": {
-        "name": "Eric McNiece",
-        "url": "https://github.com/emcniece"
+        "url": "https://github.com/LiuHaoFight"
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/Joker-1991/cordova-plugin-zeroconf.git/issues"
+        "url": "https://github.com/LiuHaoFight/cordova-plugin-zeroconf.git/issues"
     },
-    "homepage": "https://github.com/Joker-1991/cordova-plugin-zeroconf.git"
+    "homepage": "https://github.com/LiuHaoFight/cordova-plugin-zeroconf.git"
 }
