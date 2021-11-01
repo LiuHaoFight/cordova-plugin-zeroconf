@@ -39,6 +39,14 @@
                 <param name="ios-package" value="ZeroConf"/>
             </feature>
         </config-file>
+        <config-file target="*-Info.plist" parent="NSBonjourServices">
+            <array>
+              <string>_gw_discovery._tcp.</string>
+            </array>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSLocalNetworkUsageDescription">
+            <string></string>
+        </config-file>
         <header-file src="src/ios/ZeroConf-Bridging-Header.h"/>
         <source-file src="src/ios/ZeroConf.swift"/>
         <header-file src="src/ios/Hostname.h"/>
