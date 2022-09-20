@@ -100,15 +100,6 @@ public class ZeroConf extends CordovaPlugin {
         }
 
         Log.d(TAG, "Addresses " + addresses);
-
-        try {
-            hostname = getHostName(cordova);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-
-        Log.d(TAG, "Hostname " + hostname);
-
         Log.v(TAG, "Initialized");
     }
 
@@ -145,7 +136,12 @@ public class ZeroConf extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) {
 
         if (ACTION_GET_HOSTNAME.equals(action)) {
-
+          try {
+              hostname = getHostName(cordova);
+            } catch (Exception e) {
+              Log.e(TAG, e.getMessage(), e);
+            }
+            Log.d(TAG, "Hostname " + hostname);
             if (hostname != null) {
 
                 Log.d(TAG, "Hostname: " + hostname);
@@ -167,7 +163,12 @@ public class ZeroConf extends CordovaPlugin {
             final String addressFamily = args.optString(5);
 
             Log.d(TAG, "Register " + type + domain);
-
+            try {
+              hostname = getHostName(cordova);
+            } catch (Exception e) {
+              Log.e(TAG, e.getMessage(), e);
+            }
+            Log.d(TAG, "Hostname " + hostname);
             cordova.getThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -263,7 +264,12 @@ public class ZeroConf extends CordovaPlugin {
             final String addressFamily = args.optString(2);
 
             Log.d(TAG, "Watch " + type + domain);
-
+            try {
+              hostname = getHostName(cordova);
+            } catch (Exception e) {
+              Log.e(TAG, e.getMessage(), e);
+            }
+            Log.d(TAG, "Hostname " + hostname);
             cordova.getThreadPool().execute(new Runnable() {
 
                 @Override
